@@ -4,7 +4,7 @@
 set -e
 
 readonly NAME="cmangos-runner"
-readonly IMAGE="ghcr.io/byloth/cmangos/tbc"
+readonly IMAGE="scarabol/cmangos-tbc"
 readonly VERSION="latest"
 
 readonly DATA_VOLUME="cmangos_mangosd_data"
@@ -21,7 +21,7 @@ docker run "${TTY}" \
            --rm \
            -e MANGOS_DBHOST="172.17.0.1" \
            -e MANGOS_DBUSER="mangos" \
-           -e MANGOS_DBPASS="mangos00" \
+           -e MANGOS_DBPASS="mangos1337" \
            -p 3443:3443 \
            -p 3724:3724 \
            -p 7878:7878 \

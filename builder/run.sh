@@ -8,7 +8,7 @@ readonly BASE_DIR="$(realpath "$(dirname "${0}")/..")"
 source "${BASE_DIR}/.env"
 
 readonly NAME="cmangos-builder"
-readonly IMAGE="ghcr.io/byloth/cmangos/tbc/builder"
+readonly IMAGE="scarabol/cmangos-tbc/builder"
 readonly VERSION="latest"
 
 readonly DATA_VOLUME="cmangos_mangosd_data"
@@ -24,10 +24,10 @@ docker run "${TTY}" \
            --name "${NAME}" \
            --rm \
            -e MYSQL_SUPERUSER="root" \
-           -e MYSQL_SUPERPASS="root00" \
+           -e MYSQL_SUPERPASS="root1337" \
            -e MANGOS_DBHOST="172.17.0.1" \
            -e MANGOS_DBUSER="mangos" \
-           -e MANGOS_DBPASS="mangos00" \
+           -e MANGOS_DBPASS="mangos1337" \
            -v "${DATA_VOLUME}":/home/mangos/data \
            -v "${WOW_CLIENT_DIR}":/home/mangos/wow-client \
     \

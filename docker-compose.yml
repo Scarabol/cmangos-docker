@@ -3,7 +3,7 @@ services:
   mariadb:
     image: mariadb:10.10
     environment:
-      MYSQL_ROOT_PASSWORD: root00
+      MYSQL_ROOT_PASSWORD: root1337
 
     networks:
       - default
@@ -21,7 +21,7 @@ services:
       retries: 10
 
   mangosd:
-    image: ghcr.io/byloth/cmangos/tbc:latest
+    image: scarabol/cmangos-tbc:latest
     depends_on:
       mariadb:
         condition: service_healthy
@@ -29,7 +29,7 @@ services:
     environment:
       MANGOS_DBHOST: mariadb
       MANGOS_DBUSER: mangos
-      MANGOS_DBPASS: mangos00
+      MANGOS_DBPASS: mangos1337
 
     command: mangosd
     stdin_open: true
@@ -45,7 +45,7 @@ services:
       - mangosd_conf:/opt/mangos/etc
 
   realmd:
-    image: ghcr.io/byloth/cmangos/tbc:latest
+    image: scarabol/cmangos-tbc:latest
     depends_on:
       mariadb:
         condition: service_healthy
@@ -53,7 +53,7 @@ services:
     environment:
       MANGOS_DBHOST: mariadb
       MANGOS_DBUSER: mangos
-      MANGOS_DBPASS: mangos00
+      MANGOS_DBPASS: mangos1337
 
     command: realmd
     networks:

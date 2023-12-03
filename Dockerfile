@@ -90,6 +90,9 @@ RUN mkdir -p "${HOME_DIR}/build" \
         -D PCH=1 \
         -D DEBUG=0 \
         -D BUILD_EXTRACTORS=ON \
+        -D BUILD_PLAYERBOT=ON \
+        -D BUILD_AHBOT=ON \
+        -D BUILD_METRICS=ON \
  && make -j "${THREADS}" \
  && make install \
  \
@@ -134,10 +137,8 @@ LABEL org.opencontainers.image.description="A CMaNGOS \"${EXPANSION}\" version D
 LABEL org.opencontainers.image.licenses="GPL-2.0"
 LABEL org.opencontainers.image.version="${VERSION}"
 LABEL org.opencontainers.image.revision="${COMMIT_SHA}"
-LABEL org.opencontainers.image.source="https://github.com/Byloth/cmangos-docker"
-LABEL org.opencontainers.image.url="https://github.com/Byloth/cmangos-docker"
-LABEL org.opencontainers.image.authors="Matteo Bilotta <me@byloth.net>"
-LABEL org.opencontainers.image.vendor="Bylothink"
+LABEL org.opencontainers.image.source="https://github.com/Scarabol/cmangos-docker"
+LABEL org.opencontainers.image.url="https://github.com/Scarabol/cmangos-docker"
 LABEL org.opencontainers.image.created="${CREATE_DATE}"
 
 LABEL "net.cmangos.mangos-${EXPANSION}.revision"="${MANGOS_SHA1}"
@@ -186,9 +187,8 @@ RUN mkdir -p "${MANGOS_DIR}/etc"
 COPY --from=builder "${HOME_DIR}/run/etc/anticheat.conf.dist" "${MANGOS_DIR}/etc/anticheat.conf"
 COPY --from=builder "${HOME_DIR}/run/etc/mangosd.conf.dist" "${MANGOS_DIR}/etc/mangosd.conf"
 COPY --from=builder "${HOME_DIR}/run/etc/realmd.conf.dist" "${MANGOS_DIR}/etc/realmd.conf"
-# TODO copy configs when bot flags set
-#COPY --from=builder "${HOME_DIR}/run/etc/ahbot.conf.dist" "${MANGOS_DIR}/etc/ahbot.conf"
-#COPY --from=builder "${HOME_DIR}/run/etc/playerbot.conf.dist" "${MANGOS_DIR}/etc/playerbot.conf"
+COPY --from=builder "${HOME_DIR}/run/etc/ahbot.conf.dist" "${MANGOS_DIR}/etc/ahbot.conf"
+COPY --from=builder "${HOME_DIR}/run/etc/playerbot.conf.dist" "${MANGOS_DIR}/etc/playerbot.conf"
 
 COPY runner/entrypoint.sh /
 
@@ -199,7 +199,7 @@ RUN mkdir "${VOLUME_DIR}" \
  && sed -i '/^GameType/c\GameType = 0' etc/mangosd.conf \
  && sed -i '/^RealmZone/c\RealmZone = 8' etc/mangosd.conf \
  && sed -i '/^RabbitDay/c\RabbitDay = 954547200' etc/mangosd.conf \
- && sed -i '/^Motd/c\Motd = "Benvenuto su Azeroth!"' etc/mangosd.conf
+ && sed -i '/^Motd/c\Motd = "Welcome to Azeroth!"' etc/mangosd.conf
 
 ENV MANGOS_DBHOST="host.docker.internal"
 ENV MANGOS_DBPORT="3306"
@@ -226,10 +226,8 @@ LABEL org.opencontainers.image.description="A CMaNGOS \"${EXPANSION}\" version D
 LABEL org.opencontainers.image.licenses="GPL-2.0"
 LABEL org.opencontainers.image.version="${VERSION}"
 LABEL org.opencontainers.image.revision="${COMMIT_SHA}"
-LABEL org.opencontainers.image.source="https://github.com/Byloth/cmangos-docker"
-LABEL org.opencontainers.image.url="https://github.com/Byloth/cmangos-docker"
-LABEL org.opencontainers.image.authors="Matteo Bilotta <me@byloth.net>"
-LABEL org.opencontainers.image.vendor="Bylothink"
+LABEL org.opencontainers.image.source="https://github.com/Scarabol/cmangos-docker"
+LABEL org.opencontainers.image.url="https://github.com/Scarabol/cmangos-docker"
 LABEL org.opencontainers.image.created="${CREATE_DATE}"
 
 ARG MANGOS_SHA1

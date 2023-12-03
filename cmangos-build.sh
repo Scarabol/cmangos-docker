@@ -34,7 +34,7 @@ Options:
     -x | --target \"runner\" | \"builder\" | \"all\"
         Specify the Docker image target to build.
         When not specified, the target
-         is \"runner\" by default.
+         is \"all\" by default.
 
     -e | --expansion \"classic\" | \"tbc\" | \"wotlk\"
         Specify the latest game expansion
@@ -46,13 +46,13 @@ Options:
         Specify the repository that will be
          used to name the built Docker image.
         When not specified, the prefix
-         name is \"byloth/cmangos-\${EXPANSION}\" by default.
+         name is \"scarabol/cmangos-\${EXPANSION}\" by default.
 
     -v | --version <version>
         Specify the tag that will be used
          to name the built Docker image.
         When not specified, the tag
-         is \"develop\" by default.
+         is \"latest\" by default.
 
     -z | --timezone <timezone>
         Specify the timezone that will be injected
@@ -64,7 +64,7 @@ Options:
         Specify the number of threads that
          will be used during the build process.
         When not specified, the number of
-         threads is 2 by default.
+         threads is 32 by default.
 
     -C | --no-cache
         Force Docker to build the images
@@ -171,7 +171,7 @@ done
 
 if [[ -z "${TARGET}" ]]
 then
-    readonly TARGET="runner"
+    readonly TARGET="all"
 fi
 if [[ -z "${EXPANSION}" ]]
 then
@@ -179,11 +179,11 @@ then
 fi
 if [[ -z "${IMAGE}" ]]
 then
-    readonly IMAGE="byloth/cmangos-${EXPANSION}"
+    readonly IMAGE="scarabol/cmangos-${EXPANSION}"
 fi
 if [[ -z "${VERSION}" ]]
 then
-    readonly VERSION="develop"
+    readonly VERSION="latest"
 fi
 if [[ -z "${TIMEZONE}" ]]
 then
@@ -191,7 +191,7 @@ then
 fi
 if [[ -z "${THREADS}" ]]
 then
-    readonly THREADS="2"
+    readonly THREADS="32"
 fi
 
 readonly MANGOS_SHA1="b36a1489df0ea5adadc9b900ffbe2d814667eb36"
