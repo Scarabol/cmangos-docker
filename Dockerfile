@@ -25,6 +25,7 @@ RUN apt-get update \
         libmariadb-dev-compat \
         libssl-dev \
         mariadb-client \
+        vim less \
  \
  && rm -rf /var/lib/apt/lists/* \
            /tmp/*
@@ -165,6 +166,7 @@ RUN apt-get update \
         libmariadb-dev \
         libssl1.1 \
         wait-for-it \
+        vim less \
  \
  && rm -rf /var/lib/apt/lists/* \
            /tmp/*
@@ -177,20 +179,34 @@ RUN useradd --home "${HOME_DIR}" --create-home \
 
 WORKDIR "${MANGOS_DIR}"
 
-ARG EXPANSION
-COPY --from=builder "${HOME_DIR}/run" "${MANGOS_DIR}"
+RUN mkdir -p "${MANGOS_DIR}/bin"
+COPY --from=builder "${HOME_DIR}/run/bin" "${MANGOS_DIR}/bin"
+
+RUN mkdir -p "${MANGOS_DIR}/etc"
+COPY --from=builder "${HOME_DIR}/run/etc/anticheat.conf.dist" "${MANGOS_DIR}/etc/anticheat.conf"
+COPY --from=builder "${HOME_DIR}/run/etc/mangosd.conf.dist" "${MANGOS_DIR}/etc/mangosd.conf"
+COPY --from=builder "${HOME_DIR}/run/etc/realmd.conf.dist" "${MANGOS_DIR}/etc/realmd.conf"
+# TODO copy configs when bot flags set
+#COPY --from=builder "${HOME_DIR}/run/etc/ahbot.conf.dist" "${MANGOS_DIR}/etc/ahbot.conf"
+#COPY --from=builder "${HOME_DIR}/run/etc/playerbot.conf.dist" "${MANGOS_DIR}/etc/playerbot.conf"
+
 COPY runner/entrypoint.sh /
 
 ENV VOLUME_DIR="/var/lib/mangos"
 ENV TMPDIR="${VOLUME_DIR}/tmp"
 RUN mkdir "${VOLUME_DIR}" \
- && sed -i '/^DataDir/c\DataDir = "'"${VOLUME_DIR}"'"' etc/mangosd.conf.dist
+ && sed -i '/^DataDir/c\DataDir = "'"${VOLUME_DIR}"'"' etc/mangosd.conf \
+ && sed -i '/^GameType/c\GameType = 0' etc/mangosd.conf \
+ && sed -i '/^RealmZone/c\RealmZone = 8' etc/mangosd.conf \
+ && sed -i '/^RabbitDay/c\RabbitDay = 954547200' etc/mangosd.conf \
+ && sed -i '/^Motd/c\Motd = "Benvenuto su Azeroth!"' etc/mangosd.conf
 
 ENV MANGOS_DBHOST="host.docker.internal"
 ENV MANGOS_DBPORT="3306"
 ENV MANGOS_DBUSER="mangos"
 ENV MANGOS_DBPASS=""
 
+ARG EXPANSION
 ENV MANGOS_WORLD_DBNAME="${EXPANSION}mangos"
 ENV MANGOS_CHARACTERS_DBNAME="${EXPANSION}characters"
 ENV MANGOS_LOGS_DBNAME="${EXPANSION}logs"
@@ -200,7 +216,7 @@ ENTRYPOINT ["/entrypoint.sh"]
 CMD ["bash"]
 
 EXPOSE 3443 3724 7878 8085 8086
-VOLUME ["${VOLUME_DIR}"]
+VOLUME ["${VOLUME_DIR}", "${MANGOS_DIR}/etc"]
 
 ARG COMMIT_SHA
 ARG CREATE_DATE

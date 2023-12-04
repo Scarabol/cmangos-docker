@@ -42,7 +42,7 @@ services:
 
     volumes:
       - mangosd_data:/var/lib/mangos:ro
-      - ./runner/config:/opt/mangos/conf:ro
+      - mangosd_conf:/opt/mangos/etc
 
   realmd:
     image: ghcr.io/byloth/cmangos/tbc:latest
@@ -68,3 +68,4 @@ networks:
 volumes:
   mariadb_data:
   mangosd_data:
+  mangosd_conf:
